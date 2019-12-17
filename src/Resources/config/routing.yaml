@@ -7,3 +7,8 @@ user_controller:
     type: rest
     name_prefix: user_
     resource: 'App\Controller\UserController'
+
+ingredient_controller:
+    type: rest
+    name_prefix: user_
+    resource: 'App\Controller\IngredientController'
