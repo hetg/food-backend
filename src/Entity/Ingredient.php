@@ -26,8 +26,19 @@ class Ingredient
     /**
      * @var string
      *
+     * @ORM\Column(name="_uid", type="string", length=255, unique=true, nullable=false)
+     * @JMS\Type(name="string")
+     * @JMS\Groups({"api"})
+     * @JMS\SerializedName("_uid")
+     */
+    protected $uniqueIdentifier;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(type="string", length=255, nullable=false, unique=true)
      * @JMS\Type(name="string")
+     * @JMS\Groups({"api"})
      * @Assert\NotBlank()
      */
     protected $name;
@@ -38,6 +49,26 @@ class Ingredient
     public function getId(): int
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUniqueIdentifier(): string
+    {
+        return $this->uniqueIdentifier;
+    }
+
+    /**
+     * @param string $uniqueIdentifier
+     *
+     * @return Ingredient
+     */
+    public function setUniqueIdentifier(string $uniqueIdentifier): Ingredient
+    {
+        $this->uniqueIdentifier = $uniqueIdentifier;
+
+        return $this;
     }
 
     /**

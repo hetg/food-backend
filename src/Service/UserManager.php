@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\DTO\UserDto;
 use App\Entity\User;
+use App\Utils\UuidGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use \FOS\UserBundle\Doctrine\UserManager as BaseUserManager;
 use FOS\UserBundle\Util\CanonicalFieldsUpdater;
@@ -29,7 +30,6 @@ class UserManager extends BaseUserManager
      * @param UserDto $userDto
      *
      * @return User
-     * @throws HttpException
      */
     public function register(UserDto $userDto): User
     {
@@ -43,8 +43,10 @@ class UserManager extends BaseUserManager
             throw new HttpException(409, sprintf("User with email '%s' already exists", $userDto->email));
         }
 
+        $uuidGenerator = new UuidGenerator();
+
         $user = $this->createUser();
-        $user->setUserIdentifier($this->generateUserIdentifier());
+        $user->setUniqueIdentifier($uuidGenerator->generateUniqueIdentifier());
         $user->setUsername($userDto->username);
         $user->setEmail($userDto->email);
         $user->setPlainPassword($userDto->password);
@@ -53,19 +55,5 @@ class UserManager extends BaseUserManager
         $this->updateUser($user);
 
         return $user;
-    }
-
-    /**
-     * Generate random user identifier value by length value.
-     *
-     * @param int $length
-     *
-     * @return string
-     */
-    public function generateUserIdentifier($length = User::USER_IDENTIFIER_LENGTH)
-    {
-        $result = substr(preg_replace('/[^a-zA-Z0-9]/', '', base64_encode(openssl_random_pseudo_bytes($length + 1))), 0, $length);
-
-        return $result;
     }
 }

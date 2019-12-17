@@ -18,6 +18,7 @@ class UserDto implements RequestDTOInterface, ValidatedDTOInterface
      * @Assert\Email()
      */
     public $email;
+
     /**
      * @var string
      *

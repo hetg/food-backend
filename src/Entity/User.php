@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\PersistentCollection;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
@@ -11,12 +12,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity
  * @ORM\Table(name="fos_user", indexes={
- *         @ORM\Index(name="idx_user_identifier", columns={"user_identifier"})
+ *         @ORM\Index(name="idx_user_identifier", columns={"_uid"})
  *     })
  */
 class User extends BaseUser
 {
-    const USER_IDENTIFIER_LENGTH = 20;
 
     /**
      * @var int
@@ -31,12 +31,12 @@ class User extends BaseUser
     /**
      * @var string
      *
-     * @ORM\Column(name="user_identifier", type="string", length=255, unique=true, nullable=false)
+     * @ORM\Column(name="_uid", type="string", length=255, unique=true, nullable=false)
      * @JMS\Type(name="string")
      * @JMS\Groups({"api"})
      * @JMS\SerializedName("_uid")
      */
-    protected $userIdentifier;
+    protected $uniqueIdentifier;
 
     /**
      * {@inheritdoc}
@@ -56,7 +56,7 @@ class User extends BaseUser
 
 
     /**
-     * @var ArrayCollection<Ingredient>
+     * @var ArrayCollection<Ingredient>|PersistentCollection<Ingredient>
      *
      * @ORM\ManyToMany(targetEntity="Ingredient")
      * @JMS\Groups({"api"})
@@ -73,27 +73,27 @@ class User extends BaseUser
     /**
      * @return string
      */
-    public function getUserIdentifier(): string
+    public function getUniqueIdentifier(): string
     {
-        return $this->userIdentifier;
+        return $this->uniqueIdentifier;
     }
 
     /**
-     * @param string $userIdentifier
+     * @param string $uniqueIdentifier
      *
      * @return User
      */
-    public function setUserIdentifier(string $userIdentifier): User
+    public function setUniqueIdentifier(string $uniqueIdentifier): User
     {
-        $this->userIdentifier = $userIdentifier;
+        $this->uniqueIdentifier = $uniqueIdentifier;
 
         return $this;
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection|PersistentCollection
      */
-    public function getFavoriteIngredients(): ArrayCollection
+    public function getFavoriteIngredients()
     {
         return $this->favoriteIngredients;
     }
