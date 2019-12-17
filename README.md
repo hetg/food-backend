@@ -9,7 +9,10 @@
     openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout
     ```
 
-2. Copy `.env.dist` to `.env` file. Configure your local settings in `.env` file
+2. Copy `.env.dist` to `.env` file. Configure your local settings in `.env` file:
+    ```
+    cp .env.dist .env
+    ```
 
 3. Install composer packages:
     ```
@@ -17,6 +20,7 @@
     ```
 4. Run migrations:
     ```
+    bin/console doctrine:database:create
     bin/console doctrine:migrations:migrate
     ```
 5. Create admin user

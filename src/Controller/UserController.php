@@ -19,16 +19,16 @@ class UserController extends AbstractFOSRestController
      *     tags={"Users"},
      *     summary="Return user by ID",
      *     @SWG\Parameter(name="Authorization", in="header", type="string", description="Authorization token", required=true),
-     *     @SWG\Parameter(name="id", in="path", description="User ID", required=true, type="integer"),
+     *     @SWG\Parameter(name="_uid", in="path", description="User ID", required=true, type="integer"),
      *     @SWG\Response(response="200", description="If successful"),
      *     @SWG\Response(response="400", description="Bad request"),
      *     @SWG\Response(response="401", description="Unauthorized"),
      *     @SWG\Response(response="403", description="Access denied")
      * )
      *
-     * @ParamConverter(name="user", class="App\Entity\User")
+     * @ParamConverter(name="user", class="App\Entity\User", options={"mapping" : {"_uid" : "userIdentifier"}})
      *
-     * @Rest\Get("/users/{id}")
+     * @Rest\Get("/users/{_uid}")
      * @Rest\View()
      *
      * @return User
