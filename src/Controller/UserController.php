@@ -83,7 +83,7 @@ class UserController extends AbstractFOSRestController
      * @return User
      * @ApiDoc\Operation(
      *     tags={"Users"},
-     *     summary="Return user by UUID",
+     *     summary="Add ingredient to user by UUID",
      *     @SWG\Parameter(name="Authorization", in="header", type="string", description="Authorization token", required=true),
      *     @SWG\Parameter(name="_uid", in="path", description="User UUID", required=true, type="string"),
      *     @SWG\Parameter(name="i_uid", in="path", description="Ingredient UUID", required=true, type="string"),

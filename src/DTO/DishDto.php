@@ -18,4 +18,13 @@ class DishDto implements RequestDTOInterface, ValidatedDTOInterface
      */
     public $name;
 
+    /**
+     * @var float
+     *
+     * @JMS\Type(name="float")
+     * @Assert\NotBlank()
+     * @Assert\Range(min="0.01", minMessage="Price can't be less that 0.01")
+     */
+    public $price;
+
 }

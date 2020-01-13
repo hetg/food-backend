@@ -38,12 +38,23 @@ class Dish
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=255, nullable=false, unique=true)
+     * @ORM\Column(type="string", length=255, nullable=false)
      * @JMS\Type(name="string")
      * @JMS\Groups({"api"})
      * @Assert\NotBlank()
      */
     protected $name;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(type="float", nullable=false)
+     * @JMS\Type(name="float")
+     * @JMS\Groups({"api"})
+     * @Assert\NotBlank()
+     * @Assert\Range(min="0.01", minMessage="Price can't be less that 0.01")
+     */
+    protected $price;
 
     /**
      * @var ArrayCollection<Ingredient>|PersistentCollection<Ingredient>
@@ -104,6 +115,24 @@ class Dish
     {
         $this->name = $name;
 
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPrice(): float
+    {
+        return $this->price;
+    }
+
+    /**
+     * @param float $price
+     * @return Dish
+     */
+    public function setPrice(float $price): Dish
+    {
+        $this->price = $price;
         return $this;
     }
 

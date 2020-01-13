@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\DTO\DishDto;
 use App\Entity\Dish;
+use App\Entity\Ingredient;
 use App\Service\DishManager;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -167,6 +168,39 @@ class DishController extends AbstractFOSRestController
     public function deleteDishAction(Dish $dish)
     {
         $this->dishManager->deleteDish($dish);
+    }
+
+    /**
+     * @param Dish       $dish
+     * @param Ingredient $ingredient
+     *
+     * @return Dish
+     * @ApiDoc\Operation(
+     *     tags={"Dishes"},
+     *     summary="Add ingredient to dish by UUID",
+     *     @SWG\Parameter(name="Authorization", in="header", type="string", description="Authorization token", required=true),
+     *     @SWG\Parameter(name="_uid", in="path", description="User UUID", required=true, type="string"),
+     *     @SWG\Parameter(name="i_uid", in="path", description="Ingredient UUID", required=true, type="string"),
+     *     @SWG\Response(response="202", description="Accepted"),
+     *     @SWG\Response(response="400", description="Bad request"),
+     *     @SWG\Response(response="401", description="Unauthorized"),
+     *     @SWG\Response(response="403", description="Access denied")
+     * )
+     *
+     * @ParamConverter(name="dish", class="App\Entity\Dish", options={"mapping" : {"_uid" : "uniqueIdentifier"}})
+     * @ParamConverter(name="ingredient", class="App\Entity\Ingredient", options={"mapping" : {"i_uid" : "uniqueIdentifier"}})
+     *
+     * @Rest\Patch("/dishes/{_uid}/ingredients/{i_uid}")
+     * @Rest\View(statusCode=202)
+     *
+     */
+    public function addIngredientAction(Dish $dish, Ingredient $ingredient): Dish
+    {
+        $dish->addIngredient($ingredient);
+
+        $this->entityManager->flush($dish);
+
+        return $dish;
     }
 
 }

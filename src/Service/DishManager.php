@@ -32,16 +32,12 @@ class DishManager
      */
     public function createDish(DishDto $dishDto): Dish
     {
-        $name = $this->entityManager->getRepository(Dish::class)->findOneBy(['name' => $dishDto->name]);
-        if (null !== $name){
-            throw new HttpException(409, sprintf("Dish \"%s\" already exists", $dishDto->name));
-        }
-
         $uuidGenerator = new UuidGenerator();
 
         $dish = new Dish();
         $dish->setUniqueIdentifier($uuidGenerator->generateUniqueIdentifier());
         $dish->setName($dishDto->name);
+        $dish->setPrice($dishDto->price);
 
         $this->entityManager->persist($dish);
         $this->entityManager->flush($dish);
@@ -59,12 +55,8 @@ class DishManager
      */
     public function updateDish(DishDto $dishDto, Dish $dish): Dish
     {
-        $name = $this->entityManager->getRepository(Dish::class)->findOneBy(['name' => $dishDto->name]);
-        if (null !== $name){
-            throw new HttpException(409, sprintf("Dish \"%s\" already exists", $dishDto->name));
-        }
-
         $dish->setName($dishDto->name);
+        $dish->setPrice($dishDto->price);
         $this->entityManager->flush($dish);
 
         return $dish;
