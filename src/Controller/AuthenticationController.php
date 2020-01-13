@@ -49,7 +49,7 @@ class AuthenticationController extends AbstractFOSRestController
      *     )
      * )
      *
-     * @Rest\Post("/login_check")
+     * @Rest\Post("/login")
      * @Rest\View
      */
     public function loginCheckAction()
