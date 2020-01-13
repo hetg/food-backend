@@ -10,5 +10,10 @@ user_controller:
 
 ingredient_controller:
     type: rest
-    name_prefix: user_
+    name_prefix: ingredient_
     resource: 'App\Controller\IngredientController'
+
+dish_controller:
+    type: rest
+    name_prefix: dish_
+    resource: 'App\Controller\DishController'
