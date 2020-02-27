@@ -11,6 +11,7 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Nelmio\ApiDocBundle\Annotation as ApiDoc;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as SWG;
 
 class DishController extends AbstractFOSRestController
@@ -104,6 +105,8 @@ class DishController extends AbstractFOSRestController
      *
      * @Rest\Post("/dishes")
      * @Rest\View(statusCode=201)
+     *
+     * @Security("is_granted('ROLE_ADMIN')")
      */
     public function createDishAction(DishDto $dishDto): Dish
     {
@@ -140,6 +143,8 @@ class DishController extends AbstractFOSRestController
      *
      * @Rest\Patch("/dishes/{_uid}")
      * @Rest\View(statusCode=202)
+     *
+     * @Security("is_granted('ROLE_ADMIN')")
      */
     public function updateDishAction(DishDto $dishDto, Dish $dish): Dish
     {
@@ -164,6 +169,8 @@ class DishController extends AbstractFOSRestController
      *
      * @Rest\Delete("/dishes/{_uid}")
      * @Rest\View(statusCode=204)
+     *
+     * @Security("is_granted('ROLE_ADMIN')")
      */
     public function deleteDishAction(Dish $dish)
     {
@@ -193,6 +200,7 @@ class DishController extends AbstractFOSRestController
      * @Rest\Patch("/dishes/{_uid}/ingredients/{i_uid}")
      * @Rest\View(statusCode=202)
      *
+     * @Security("is_granted('ROLE_ADMIN')")
      */
     public function addIngredientAction(Dish $dish, Ingredient $ingredient): Dish
     {
