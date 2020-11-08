@@ -1,6 +1,6 @@
 {
-    "name": "hetg/social-backend",
-    "description": "New social network",
+    "name": "hetg/food-backend",
+    "description": "Food App backend",
     "type": "project",
     "license": "proprietary",
     "require": {
