@@ -10,8 +10,14 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Nelmio\ApiDocBundle\Annotation as ApiDoc;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as SWG;
 
+/**
+ * Class IngredientController
+ *
+ * @package App\Controller
+ */
 class IngredientController extends AbstractFOSRestController
 {
 
@@ -103,6 +109,8 @@ class IngredientController extends AbstractFOSRestController
      *
      * @Rest\Post("/ingredients")
      * @Rest\View(statusCode=201)
+     *
+     * @Security("is_granted('ROLE_ADMIN')")
      */
     public function createIngredientAction(IngredientDto $ingredientDto): Ingredient
     {
@@ -139,6 +147,8 @@ class IngredientController extends AbstractFOSRestController
      *
      * @Rest\Patch("/ingredients/{_uid}")
      * @Rest\View(statusCode=202)
+     *
+     * @Security("is_granted('ROLE_ADMIN')")
      */
     public function updateIngredientAction(IngredientDto $ingredientDto, Ingredient $ingredient): Ingredient
     {
@@ -163,6 +173,8 @@ class IngredientController extends AbstractFOSRestController
      *
      * @Rest\Delete("/ingredients/{_uid}")
      * @Rest\View(statusCode=204)
+     *
+     * @Security("is_granted('ROLE_ADMIN')")
      */
     public function deleteIngredientAction(Ingredient $ingredient)
     {
