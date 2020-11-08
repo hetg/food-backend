@@ -10,8 +10,14 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Nelmio\ApiDocBundle\Annotation as ApiDoc;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as SWG;
 
+/**
+ * Class IngredientController
+ *
+ * @package App\Controller
+ */
 class IngredientController extends AbstractFOSRestController
 {
 
@@ -58,7 +64,7 @@ class IngredientController extends AbstractFOSRestController
      *     tags={"Ingredients"},
      *     summary="Return ingredient by UUID",
      *     @SWG\Parameter(name="Authorization", in="header", type="string", description="Authorization token", required=true),
-     *     @SWG\Parameter(name="_uid", in="path", description="Ingredient UUID", required=true, type="integer"),
+     *     @SWG\Parameter(name="_uid", in="path", description="Ingredient UUID", required=true, type="string"),
      *     @SWG\Response(response="200", description="If successful"),
      *     @SWG\Response(response="400", description="Bad request"),
      *     @SWG\Response(response="401", description="Unauthorized"),
@@ -103,6 +109,8 @@ class IngredientController extends AbstractFOSRestController
      *
      * @Rest\Post("/ingredients")
      * @Rest\View(statusCode=201)
+     *
+     * @Security("is_granted('ROLE_ADMIN')")
      */
     public function createIngredientAction(IngredientDto $ingredientDto): Ingredient
     {
@@ -118,7 +126,7 @@ class IngredientController extends AbstractFOSRestController
      *     tags={"Ingredients"},
      *     summary="Update ingredient",
      *     @SWG\Parameter(name="Authorization", in="header", type="string", description="Authorization token", required=true),
-     *     @SWG\Parameter(name="_uid", in="path", description="Ingredient UUID", required=true, type="integer"),
+     *     @SWG\Parameter(name="_uid", in="path", description="Ingredient UUID", required=true, type="string"),
      *     @SWG\Parameter(
      *          name="Ingredient data",
      *          in="body",
@@ -139,6 +147,8 @@ class IngredientController extends AbstractFOSRestController
      *
      * @Rest\Patch("/ingredients/{_uid}")
      * @Rest\View(statusCode=202)
+     *
+     * @Security("is_granted('ROLE_ADMIN')")
      */
     public function updateIngredientAction(IngredientDto $ingredientDto, Ingredient $ingredient): Ingredient
     {
@@ -152,7 +162,7 @@ class IngredientController extends AbstractFOSRestController
      *     tags={"Ingredients"},
      *     summary="Delete ingredient",
      *     @SWG\Parameter(name="Authorization", in="header", type="string", description="Authorization token", required=true),
-     *     @SWG\Parameter(name="_uid", in="path", description="Ingredient UUID", required=true, type="integer"),
+     *     @SWG\Parameter(name="_uid", in="path", description="Ingredient UUID", required=true, type="string"),
      *     @SWG\Response(response="204", description="No Content"),
      *     @SWG\Response(response="400", description="Bad request"),
      *     @SWG\Response(response="401", description="Unauthorized"),
@@ -163,6 +173,8 @@ class IngredientController extends AbstractFOSRestController
      *
      * @Rest\Delete("/ingredients/{_uid}")
      * @Rest\View(statusCode=204)
+     *
+     * @Security("is_granted('ROLE_ADMIN')")
      */
     public function deleteIngredientAction(Ingredient $ingredient)
     {

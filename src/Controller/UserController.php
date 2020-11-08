@@ -58,7 +58,7 @@ class UserController extends AbstractFOSRestController
      *     tags={"Users"},
      *     summary="Return user's favorite ingredients",
      *     @SWG\Parameter(name="Authorization", in="header", type="string", description="Authorization token", required=true),
-     *     @SWG\Parameter(name="_uid", in="path", description="User UUID", required=true, type="integer"),
+     *     @SWG\Parameter(name="_uid", in="path", description="User UUID", required=true, type="string"),
      *     @SWG\Response(response="200", description="If successful"),
      *     @SWG\Response(response="400", description="Bad request"),
      *     @SWG\Response(response="401", description="Unauthorized"),
@@ -83,10 +83,10 @@ class UserController extends AbstractFOSRestController
      * @return User
      * @ApiDoc\Operation(
      *     tags={"Users"},
-     *     summary="Return user by UUID",
+     *     summary="Add ingredient to user by UUID",
      *     @SWG\Parameter(name="Authorization", in="header", type="string", description="Authorization token", required=true),
-     *     @SWG\Parameter(name="_uid", in="path", description="User UUID", required=true, type="integer"),
-     *     @SWG\Parameter(name="i_uid", in="path", description="Ingredient UUID", required=true, type="integer"),
+     *     @SWG\Parameter(name="_uid", in="path", description="User UUID", required=true, type="string"),
+     *     @SWG\Parameter(name="i_uid", in="path", description="Ingredient UUID", required=true, type="string"),
      *     @SWG\Response(response="202", description="Accepted"),
      *     @SWG\Response(response="400", description="Bad request"),
      *     @SWG\Response(response="401", description="Unauthorized"),
