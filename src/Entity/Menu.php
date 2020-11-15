@@ -3,19 +3,16 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\PersistentCollection;
-use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="fos_user", indexes={
- *         @ORM\Index(name="idx_user_identifier", columns={"_uid"})
- *     })
+ * @ORM\Table(name="menu")
  */
-class User extends BaseUser
+class Menu
 {
 
     /**
@@ -39,35 +36,35 @@ class User extends BaseUser
     protected $uniqueIdentifier;
 
     /**
-     * {@inheritdoc}
+     * @var string
      *
+     * @ORM\Column(type="string", length=255, nullable=false)
      * @JMS\Type(name="string")
      * @JMS\Groups({"api"})
+     * @Assert\NotBlank()
      */
-    protected $username;
+    protected $name;
 
     /**
-     * {@inheritdoc}
+     * @var ArrayCollection<Dish>|PersistentCollection<Dish>
      *
-     * @JMS\Type(name="string")
+     * @ORM\OneToMany(targetEntity="Dish", mappedBy="menu")
      * @JMS\Groups({"api"})
      */
-    protected $email;
+    protected $dishes;
 
-
-    /**
-     * @var ArrayCollection<Ingredient>|PersistentCollection<Ingredient>
-     *
-     * @ORM\ManyToMany(targetEntity="Ingredient")
-     * @JMS\Groups({"api"})
-     */
-    protected $favoriteIngredients;
 
     public function __construct()
     {
-        parent::__construct();
+        $this->dishes = new ArrayCollection();
+    }
 
-        $this->favoriteIngredients = new ArrayCollection();
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
     }
 
     /**
@@ -81,9 +78,9 @@ class User extends BaseUser
     /**
      * @param string $uniqueIdentifier
      *
-     * @return User
+     * @return Menu
      */
-    public function setUniqueIdentifier(string $uniqueIdentifier): User
+    public function setUniqueIdentifier(string $uniqueIdentifier): Menu
     {
         $this->uniqueIdentifier = $uniqueIdentifier;
 
@@ -91,36 +88,56 @@ class User extends BaseUser
     }
 
     /**
-     * @return ArrayCollection|PersistentCollection
+     * @return string
      */
-    public function getFavoriteIngredients()
+    public function getName(): string
     {
-        return $this->favoriteIngredients;
+        return $this->name;
     }
 
     /**
-     * @param Ingredient $ingredient
+     * @param string $name
      *
-     * @return User
+     * @return Menu
      */
-    public function addFavoriteIngredient(Ingredient $ingredient): User
+    public function setName(string $name): Menu
     {
-        if (!$this->favoriteIngredients->contains($ingredient)) {
-            $this->favoriteIngredients->add($ingredient);
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection|PersistentCollection
+     */
+    public function getDishes()
+    {
+        return $this->dishes;
+    }
+
+    /**
+     * @param Dish $dish
+     *
+     * @return Menu
+     */
+    public function addDish(Dish $dish): Menu
+    {
+        if (!$this->dishes->contains($dish)){
+            $this->dishes->add($dish);
         }
 
         return $this;
     }
 
     /**
-     * @param Ingredient $ingredient
+     * @param Dish $dish
      *
-     * @return User
+     * @return Menu
      */
-    public function removeFavoriteIngredient(Ingredient $ingredient): User
+    public function removeDish(Dish $dish): Menu
     {
-        if ($this->favoriteIngredients->contains($ingredient)) {
-            $this->favoriteIngredients->removeElement($ingredient);
+        if ($this->dishes->contains($dish)) {
+            $this->dishes->removeElement($dish);
         }
 
         return $this;

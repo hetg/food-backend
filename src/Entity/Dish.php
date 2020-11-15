@@ -64,6 +64,14 @@ class Dish
      */
     protected $ingredients;
 
+    /**
+     * @var Menu
+     *
+     * @ORM\ManyToOne(targetEntity="Menu", inversedBy="dishes")
+     * @JMS\Groups({"api"})
+     */
+    protected $menu;
+
 
     public function __construct()
     {
@@ -151,7 +159,9 @@ class Dish
      */
     public function addIngredient(Ingredient $ingredient): Dish
     {
-        $this->ingredients->add($ingredient);
+        if (!$this->ingredients->contains($ingredient)) {
+            $this->ingredients->add($ingredient);
+        }
 
         return $this;
     }
@@ -163,8 +173,29 @@ class Dish
      */
     public function removeIngredient(Ingredient $ingredient): Dish
     {
-        $this->ingredients->removeElement($ingredient);
+        if ($this->ingredients->contains($ingredient)) {
+            $this->ingredients->removeElement($ingredient);
+        }
 
+        return $this;
+    }
+
+    /**
+     * @return Menu
+     */
+    public function getMenu(): Menu
+    {
+        return $this->menu;
+    }
+
+    /**
+     * @param Menu $menu
+     *
+     * @return Dish
+     */
+    public function setMenu(Menu $menu): Dish
+    {
+        $this->menu = $menu;
         return $this;
     }
 }

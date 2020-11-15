@@ -17,3 +17,8 @@ dish_controller:
     type: rest
     name_prefix: dish_
     resource: 'App\Controller\DishController'
+
+menu_controller:
+    type: rest
+    name_prefix: menu_
+    resource: 'App\Controller\MenuController'

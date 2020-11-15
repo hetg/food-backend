@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\DTO\DishDto;
+use App\DTO\MenuDto;
 use App\Entity\Dish;
 use App\Entity\Ingredient;
-use App\Service\DishManager;
+use App\Entity\Menu;
+use App\Service\MenuManager;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -14,7 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as SWG;
 
-class DishController extends AbstractFOSRestController
+class MenuController extends AbstractFOSRestController
 {
 
     /**
@@ -22,20 +24,20 @@ class DishController extends AbstractFOSRestController
      */
     private $entityManager;
     /**
-     * @var DishManager
+     * @var MenuManager
      */
-    private $dishManager;
+    private $menuManager;
 
-    public function __construct(EntityManagerInterface $entityManager, DishManager $dishManager)
+    public function __construct(EntityManagerInterface $entityManager, MenuManager $menuManager)
     {
         $this->entityManager = $entityManager;
-        $this->dishManager = $dishManager;
+        $this->menuManager = $menuManager;
     }
 
     /**
      * @ApiDoc\Operation(
-     *     tags={"Dishes"},
-     *     summary="Return list of dishes",
+     *     tags={"Menus"},
+     *     summary="Return list of menus",
      *     @SWG\Parameter(name="Authorization", in="header", type="string", description="Authorization token", required=true),
      *     @SWG\Response(response="200", description="If successful"),
      *     @SWG\Response(response="400", description="Bad request"),
@@ -43,58 +45,58 @@ class DishController extends AbstractFOSRestController
      *     @SWG\Response(response="403", description="Access denied")
      * )
      *
-     * @Rest\Get("/dishes")
+     * @Rest\Get("/menus")
      * @Rest\View()
      *
      * @return array
      */
-    public function getDishesAction(): array
+    public function getMenusAction(): array
     {
-        return $this->entityManager->getRepository(Dish::class)->findAll();
+        return $this->entityManager->getRepository(Menu::class)->findAll();
     }
 
     /**
-     * @param Dish $dish
+     * @param Menu $menu
      *
      * @ApiDoc\Operation(
-     *     tags={"Dishes"},
-     *     summary="Return dish by UUID",
+     *     tags={"Menus"},
+     *     summary="Return menu by UUID",
      *     @SWG\Parameter(name="Authorization", in="header", type="string", description="Authorization token", required=true),
-     *     @SWG\Parameter(name="_uid", in="path", description="Dish UUID", required=true, type="string"),
+     *     @SWG\Parameter(name="_uid", in="path", description="Menu UUID", required=true, type="string"),
      *     @SWG\Response(response="200", description="If successful"),
      *     @SWG\Response(response="400", description="Bad request"),
      *     @SWG\Response(response="401", description="Unauthorized"),
      *     @SWG\Response(response="403", description="Access denied")
      * )
      *
-     * @ParamConverter(name="dish", class="App\Entity\Dish", options={"mapping" : {"_uid" : "uniqueIdentifier"}})
+     * @ParamConverter(name="menu", class="App\Entity\Menu", options={"mapping" : {"_uid" : "uniqueIdentifier"}})
      *
-     * @Rest\Get("/dishes/{_uid}")
+     * @Rest\Get("/menus/{_uid}")
      * @Rest\View()
      *
-     * @return Dish
+     * @return Menu
      */
-    public function getDishAction(Dish $dish): Dish
+    public function getMenuAction(Menu $menu): Menu
     {
-        return $dish;
+        return $menu;
     }
 
     /**
-     * @param DishDto $dishDto
+     * @param MenuDto $menuDto
      *
-     * @return Dish
+     * @return Menu
      * @ApiDoc\Operation(
-     *     tags={"Dishes"},
-     *     summary="Create dish",
+     *     tags={"Menus"},
+     *     summary="Create menu",
      *     @SWG\Parameter(name="Authorization", in="header", type="string", description="Authorization token", required=true),
      *     @SWG\Parameter(
-     *          name="Dish data",
+     *          name="Menu data",
      *          in="body",
-     *          description="Data for creating a dish",
+     *          description="Data for creating a menu",
      *          type="json",
      *          schema = @SWG\Schema(
      *              type="object",
-     *              ref= @ApiDoc\Model(type=DishDto::class)
+     *              ref= @ApiDoc\Model(type=MenuDto::class)
      *          )
      *     ),
      *     @SWG\Response(response="201", description="Created"),
@@ -103,34 +105,34 @@ class DishController extends AbstractFOSRestController
      *     @SWG\Response(response="403", description="Access denied")
      * )
      *
-     * @Rest\Post("/dishes")
+     * @Rest\Post("/menus")
      * @Rest\View(statusCode=201)
      *
      * @Security("is_granted('ROLE_ADMIN')")
      */
-    public function createDishAction(DishDto $dishDto): Dish
+    public function createMenuAction(MenuDto $menuDto): Menu
     {
-        return $this->dishManager->createDish($dishDto);
+        return $this->menuManager->create($menuDto);
     }
 
     /**
-     * @param DishDto $dishDto
-     * @param Dish    $dish
+     * @param MenuDto $menuDto
+     * @param Menu    $menu
      *
-     * @return Dish
+     * @return Menu
      * @ApiDoc\Operation(
-     *     tags={"Dishes"},
-     *     summary="Update dish",
+     *     tags={"Menus"},
+     *     summary="Update menu",
      *     @SWG\Parameter(name="Authorization", in="header", type="string", description="Authorization token", required=true),
-     *     @SWG\Parameter(name="_uid", in="path", description="Dish UUID", required=true, type="string"),
+     *     @SWG\Parameter(name="_uid", in="path", description="Menu UUID", required=true, type="string"),
      *     @SWG\Parameter(
-     *          name="Dish data",
+     *          name="Menu data",
      *          in="body",
-     *          description="Data for updating a dish",
+     *          description="Data for updating a menu",
      *          type="json",
      *          schema = @SWG\Schema(
      *              type="object",
-     *              ref= @ApiDoc\Model(type=DishDto::class)
+     *              ref= @ApiDoc\Model(type=MenuDto::class)
      *          )
      *     ),
      *     @SWG\Response(response="202", description="Accepted"),
@@ -139,76 +141,76 @@ class DishController extends AbstractFOSRestController
      *     @SWG\Response(response="403", description="Access denied")
      * )
      *
-     * @ParamConverter(name="dish", class="App\Entity\Dish", options={"mapping" : {"_uid" : "uniqueIdentifier"}})
+     * @ParamConverter(name="menu", class="App\Entity\Menu", options={"mapping" : {"_uid" : "uniqueIdentifier"}})
      *
-     * @Rest\Patch("/dishes/{_uid}")
+     * @Rest\Patch("/menus/{_uid}")
      * @Rest\View(statusCode=202)
      *
      * @Security("is_granted('ROLE_ADMIN')")
      */
-    public function updateDishAction(DishDto $dishDto, Dish $dish): Dish
+    public function updateMenuAction(MenuDto $menuDto, Menu $menu): Menu
     {
-        return $this->dishManager->updateDish($dishDto, $dish);
+        return $this->menuManager->update($menuDto, $menu);
     }
 
     /**
-     * @param Dish    $dish
+     * @param Menu    $menu
      *
      * @ApiDoc\Operation(
-     *     tags={"Dishes"},
-     *     summary="Delete dish",
+     *     tags={"Menus"},
+     *     summary="Delete menu",
      *     @SWG\Parameter(name="Authorization", in="header", type="string", description="Authorization token", required=true),
-     *     @SWG\Parameter(name="_uid", in="path", description="Dish UUID", required=true, type="string"),
+     *     @SWG\Parameter(name="_uid", in="path", description="Menu UUID", required=true, type="string"),
      *     @SWG\Response(response="204", description="No Content"),
      *     @SWG\Response(response="400", description="Bad request"),
      *     @SWG\Response(response="401", description="Unauthorized"),
      *     @SWG\Response(response="403", description="Access denied")
      * )
      *
-     * @ParamConverter(name="dish", class="App\Entity\Dish", options={"mapping" : {"_uid" : "uniqueIdentifier"}})
+     * @ParamConverter(name="menu", class="App\Entity\Menu", options={"mapping" : {"_uid" : "uniqueIdentifier"}})
      *
-     * @Rest\Delete("/dishes/{_uid}")
+     * @Rest\Delete("/menus/{_uid}")
      * @Rest\View(statusCode=204)
      *
      * @Security("is_granted('ROLE_ADMIN')")
      */
-    public function deleteDishAction(Dish $dish)
+    public function deleteMenuAction(Menu $menu)
     {
-        $this->dishManager->deleteDish($dish);
+        $this->menuManager->delete($menu);
     }
 
     /**
+     * @param Menu       $menu
      * @param Dish       $dish
-     * @param Ingredient $ingredient
      *
-     * @return Dish
+     * @return Menu
      * @ApiDoc\Operation(
-     *     tags={"Dishes"},
-     *     summary="Add ingredient to dish by UUID",
+     *     tags={"Menus"},
+     *     summary="Add dish to menu by UUID",
      *     @SWG\Parameter(name="Authorization", in="header", type="string", description="Authorization token", required=true),
-     *     @SWG\Parameter(name="_uid", in="path", description="Dish UUID", required=true, type="string"),
-     *     @SWG\Parameter(name="i_uid", in="path", description="Ingredient UUID", required=true, type="string"),
+     *     @SWG\Parameter(name="_uid", in="path", description="Menu UUID", required=true, type="string"),
+     *     @SWG\Parameter(name="d_uid", in="path", description="Dish UUID", required=true, type="string"),
      *     @SWG\Response(response="202", description="Accepted"),
      *     @SWG\Response(response="400", description="Bad request"),
      *     @SWG\Response(response="401", description="Unauthorized"),
      *     @SWG\Response(response="403", description="Access denied")
      * )
      *
-     * @ParamConverter(name="dish", class="App\Entity\Dish", options={"mapping" : {"_uid" : "uniqueIdentifier"}})
-     * @ParamConverter(name="ingredient", class="App\Entity\Ingredient", options={"mapping" : {"i_uid" : "uniqueIdentifier"}})
+     * @ParamConverter(name="menu", class="App\Entity\Menu", options={"mapping" : {"_uid" : "uniqueIdentifier"}})
+     * @ParamConverter(name="dish", class="App\Entity\Dish", options={"mapping" : {"d_uid" : "uniqueIdentifier"}})
      *
-     * @Rest\Patch("/dishes/{_uid}/ingredients/{i_uid}")
+     * @Rest\Patch("/menus/{_uid}/dishes/{i_uid}")
      * @Rest\View(statusCode=202)
      *
      * @Security("is_granted('ROLE_ADMIN')")
      */
-    public function addIngredientAction(Dish $dish, Ingredient $ingredient): Dish
+    public function addDishAction(Menu $menu, Dish $dish): Menu
     {
-        $dish->addIngredient($ingredient);
+        $menu->addDish($dish);
 
-        $this->entityManager->flush($dish);
+        $this->entityManager->flush($menu);
 
-        return $dish;
+        return $menu;
     }
 
 }
